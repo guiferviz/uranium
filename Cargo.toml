@@ -1,0 +1,10 @@
+
+[package]
+name = "uranium"
+version = "0.1.0"
+authors = ["guiferviz <guiferviz@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+llvm-sys = "100"
+
