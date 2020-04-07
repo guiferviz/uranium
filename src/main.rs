@@ -39,17 +39,45 @@ fn main() {
     // Rust's memory management at compile time is not available in external
     // libraries, so Rust treats it as unsafe.
     unsafe {
+        // Create the minimum objects needed to generate some working code.
+        // An LLVM Context is very similar to programming scopes. It gives you
+        // isolation. Modules, functions of types defined in one context
+        // cannot be used in other contexts.
+        // http://llvm.org/docs/ProgrammersManual.html#achieving-isolation-with-llvmcontext
+        let context = llvm::core::LLVMContextCreate();
         // Top level structure present in LLVM programs.
         // http://llvm.org/docs/ProgrammersManual.html#the-module-class
         let module = llvm::core::LLVMModuleCreateWithName(c_str!("main"));
 
+        // Create void type and "function that returns void" type.
+        // All this types need to be defined on the created context.
+        let void_type = llvm::core::LLVMVoidTypeInContext(context);
+        // This constructor does not ask for a context because it asks for
+        // an already defined type that already has a context.
+        // The first parameter is the return type of the function.
+        // The second one are the list of arguments.
+        // In this case, we do not want arguments, so we provide a pointer
+        // pointing to null.
+        // The number of parameters is indicated in the third parameter.
+        // The last parameter is a boolean that indicates if the number of
+        // arguments is variable. We use 0 as false.
+        // TODO: try with null pointer, not mut.
+        let fun_void_type = llvm::core::LLVMFunctionType(
+            void_type, std::ptr::null_mut(), 0, 0);
+
+        // Create a main function that does nothing.
+        #[warn(unused_variables)]
+        let _main_fun = llvm::core::LLVMAddFunction(
+            module, c_str!("main"), fun_void_type);
+
         // Write our empty module to a bitcode file.
         llvm::bit_writer::LLVMWriteBitcodeToFile(module, c_str!("main.bc"));
 
-        // Dispose module (calling destructor method).
+        // Dispose objects (calling destructor method).
         llvm::core::LLVMDisposeModule(module);
+        llvm::core::LLVMContextDispose(context);
     }
 
-    println!("Done!")
+    println!("Done!");
 }
 
