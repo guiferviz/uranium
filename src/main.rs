@@ -48,6 +48,12 @@ fn main() {
         // Top level structure present in LLVM programs.
         // http://llvm.org/docs/ProgrammersManual.html#the-module-class
         let module = llvm::core::LLVMModuleCreateWithName(c_str!("main"));
+        // Create an intermediate code builder.
+        // We can see this object as a cursor. We can create functions and
+        // modules without this object, but when we want to write the body
+        // of those functions we need this object.
+        // Useful for creating strings, constants, returns statements...
+        let builder = llvm::core::LLVMCreateBuilderInContext(context);
 
         // Create void type and "function that returns void" type.
         // All this types need to be defined on the created context.
@@ -57,18 +63,26 @@ fn main() {
         // The first parameter is the return type of the function.
         // The second one are the list of arguments.
         // In this case, we do not want arguments, so we provide a pointer
-        // pointing to null.
+        // pointing to null. The pointer must be mutable.
         // The number of parameters is indicated in the third parameter.
         // The last parameter is a boolean that indicates if the number of
         // arguments is variable. We use 0 as false.
-        // TODO: try with null pointer, not mut.
         let fun_void_type = llvm::core::LLVMFunctionType(
             void_type, std::ptr::null_mut(), 0, 0);
 
         // Create a main function that does nothing.
         #[warn(unused_variables)]
-        let _main_fun = llvm::core::LLVMAddFunction(
+        let main_fun = llvm::core::LLVMAddFunction(
             module, c_str!("main"), fun_void_type);
+
+        // Create a body in the main function. We need to return void.
+        let bb = llvm::core::LLVMAppendBasicBlockInContext(
+            context, main_fun, c_str!("main_body"));
+        // Moves the builder (moves the cursor) at the end of that new block
+        // so we can start writing statements there.
+        llvm::core::LLVMPositionBuilderAtEnd(builder, bb);
+        // Add a "return void;" statement in the main body.
+        llvm::core::LLVMBuildRetVoid(builder);
 
         // Write our empty module to a bitcode file.
         llvm::bit_writer::LLVMWriteBitcodeToFile(module, c_str!("main.bc"));
