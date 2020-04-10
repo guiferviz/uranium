@@ -12,7 +12,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="0.92.4 (unknown)"
-   sodipodi:docname="logo.svg"
+   sodipodi:docname="logo_big.svg"
    viewBox="0 0 969.99996 969.99996"
    height="970"
    width="970"
@@ -1388,7 +1388,7 @@
      id="namedview4"
      showgrid="false"
      inkscape:zoom="0.52124996"
-     inkscape:cx="414.17305"
+     inkscape:cx="61.175421"
      inkscape:cy="482.26596"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -1397,14 +1397,7 @@
      id="g10"
      inkscape:groupmode="layer"
      inkscape:label="06"
-     transform="matrix(1.3333333,0,0,-1.3333333,-62.748635,1029.4989)"><rect
-       style="fill:#223651;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.28989506;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect5795"
-       width="725.21014"
-       height="725.21014"
-       x="48.206425"
-       y="-770.97925"
-       transform="scale(1,-1)" /><use
+     transform="matrix(1.3333333,0,0,-1.3333333,-62.748635,1029.4989)"><use
        id="use9465"
        inkscape:spray-origin="#g9445"
        xlink:href="#g9445"
