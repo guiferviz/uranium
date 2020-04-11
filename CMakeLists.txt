@@ -9,14 +9,14 @@
 ################
 
 # If you are using a lower version of CMake remove this and try it.
-# Let me know which was the lowest version you could compile with to update
-# the file.
+# Let me know which was the lowest version you could compile with
+# to downgrade the version here.
 cmake_minimum_required(VERSION 3.10.2)
 
 # Of course LLVM is required! The bin directory of LLVM should be on your PATH.
-# More details about LLVM and CMake in:
+# More details about LLVM and CMake for personal projects in:
 # http://llvm.org/docs/CMake.html#embedding-llvm-in-your-project
-# With LLVM 11.0.0git I get a couple of warnings but everything seems to work
+# With LLVM 10.0.0 I get a couple of warnings but everything seems to work
 # fine (at least with simple examples).
 find_package(LLVM REQUIRED CONFIG)
 message(STATUS "Found LLVM version: ${LLVM_PACKAGE_VERSION}")
@@ -55,9 +55,6 @@ include_directories(${INCLUDE_DIR})
 # The LLVM_INSTALL_INCLUDE_DIR is created by the find_package function.
 include_directories(${LLVM_INCLUDE_DIR})
 add_definitions(${LLVM_DEFINITIONS})
-
-# Add all cpp files under src.
-file(GLOB_RECURSE SOURCES ${SOURCES_DIR}/*.cpp)
 
 # Adding definitions to use with the preprocessor.
 # Using this we do not need to maintain different version numbers in several
