@@ -2,6 +2,7 @@
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/Constants.h"
 
 
 using namespace llvm;
@@ -22,15 +23,15 @@ int main(int argc, char *argv[]) {
     // to be used.
     mainModule.setSourceFileName("main.ura");
 
-    // Create void type and "function that returns void" type.
+    // Create i8 type and "function that returns i8" type.
     // All this types need to be defined on the created context.
-    Type *voidType = Type::getVoidTy(ctx);
+    Type *i8Type = Type::getInt8Ty(ctx);
     // This constructor does not ask for a context because it asks for
     // a type that already has a context associated.
     // The first parameter is the return type of the function.
     // The second parameter is a boolean that indicates if the number of
     // arguments is variable.
-    FunctionType *funVoidType = FunctionType::get(voidType, false);
+    FunctionType *funI8Type = FunctionType::get(i8Type, false);
 
     // Create main function associated to the mainModule.
     // The linkage defines the visibility of that function during the linkage
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]) {
     // one executable.
     // We indicate that we want that function to be present in that linkage.
     Function *mainFun = Function::Create(
-            funVoidType, Function::ExternalLinkage, "main", mainModule);
+            funI8Type, Function::ExternalLinkage, "main", mainModule);
 
     // Creating a block to write the body of the function.
     // While creating functions the order does not matter, a builder is like a
@@ -48,8 +49,10 @@ int main(int argc, char *argv[]) {
     BasicBlock *mainBlock = BasicBlock::Create(ctx, "main_block", mainFun);
     // Place cursor at the beggining of the main body.
     builder.SetInsertPoint(mainBlock);
-    // Add "return void;" statement.
-    builder.CreateRetVoid();
+    // Create constant to return.
+    Constant *i8Value = ConstantInt::get(i8Type, 4, false);
+    // Add "return i8Value;" statement.
+    builder.CreateRet(i8Value);
 
     // Write the IR code of our empty module to stderr.
     // Why stderr? I don't know indeed...
