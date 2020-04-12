@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     // Place cursor at the beggining of the main body.
     builder.SetInsertPoint(mainBlock);
     // Create constant to return.
-    Constant *i8Value = ConstantInt::get(i8Type, 4, false);
+    Constant *i8Value = ConstantInt::get(i8Type, 4);
     // Add "return i8Value;" statement.
     builder.CreateRet(i8Value);
 
