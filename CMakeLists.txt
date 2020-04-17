@@ -45,6 +45,19 @@ set(INCLUDE_DIR "include")
 set(SOURCES_DIR "src")
 
 
+########
+# Flex #
+########
+# https://cmake.org/cmake/help/v3.0/module/FindFLEX.html
+
+find_package(FLEX)
+FLEX_TARGET(scanner ${SOURCES_DIR}/lexer.l  ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp)
+# Executable name does not need to be equal to FLEX_TARGET.
+add_executable(scanner
+    # The name in FLEX_*_OUTPUTS should be the same as in FLEX_TARGET.
+    ${FLEX_scanner_OUTPUTS})
+
+
 #####################
 # Executable target #
 #####################
@@ -62,7 +75,8 @@ add_definitions(${LLVM_DEFINITIONS})
 add_definitions(-DURANIUM_VERSION=\"${URANIUM_VERSION}\")  # Version as a string.
 
 # Add executable target.
-add_executable(${EXECUTABLE_NAME} ${SOURCES_DIR}/main.cpp)
+add_executable(${EXECUTABLE_NAME}
+    ${SOURCES_DIR}/main.cpp)
 # Find the libraries that correspond to the LLVM components that we want to use.
 # I suppose this is for avoiding linking unused libraries, but not sure.
 # The line in the documentation includes support and irreader that are not
@@ -70,4 +84,5 @@ add_executable(${EXECUTABLE_NAME} ${SOURCES_DIR}/main.cpp)
 #llvm_map_components_to_libnames(llvm_libs support core irreader)
 llvm_map_components_to_libnames(llvm_libs core)
 target_link_libraries(${EXECUTABLE_NAME} ${llvm_libs})  # llvm_libs must be lower case!
+
 
